@@ -28,7 +28,7 @@ print(domain_sold_vic[0])
 print(domain_sold_vic[0]['sold_listing_url'])
 
 #insert data into table
-#cur.executemany("INSERT INTO public.domain_sold_urls(postcode,url) VALUES (%(first_name)s, %(last_name)s)", namedict)
+cur.executemany("INSERT INTO public.domain_sold_urls(postcode,sold_listing_url) VALUES (%(postcode)s, %(sold_listing_url)s)", domain_sold_vic)
 
 # Make the changes to the database persistent and close communication with the database
 conn.commit()
