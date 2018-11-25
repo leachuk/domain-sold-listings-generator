@@ -34,6 +34,16 @@ class DomainSoldListingSpider(scrapy.Spider):
                 'square-meters': resultset.xpath(SQUARE_METERS).extract_first(),
             }
 
+        NEXT_PAGE_SELECTOR = '#skip-link-content > div.search-results__main > div.paginator > a:nth-child(3) ::attr(href)'
+        next_page = response.css(NEXT_PAGE_SELECTOR).extract_first()
+        print("###########:%s " % next_page)
+
+        if next_page:
+            yield scrapy.Request(
+                response.urljoin(next_page),
+                callback=self.parse
+            )
+
          #print(resultset)
          #print("USER_AGENT: %s" % self.settings.attributes['USER_AGENT'])
          #print("USER_AGENT_LIST: %s" % self.settings.attributes['USER_AGENT_LIST'])
