@@ -34,8 +34,8 @@ class DomainSoldListingSpider(scrapy.Spider):
                 'square-meters': resultset.xpath(SQUARE_METERS).extract_first(),
             }
 
-        NEXT_PAGE_SELECTOR = '#skip-link-content > div.search-results__main > div.paginator > a:nth-child(3) ::attr(href)'
-        next_page = response.css(NEXT_PAGE_SELECTOR).extract_first()
+        NEXT_PAGE_SELECTOR = './/*[@id="skip-link-content"]//*[@class="paginator"]/a[last()]/@href'
+        next_page = response.xpath(NEXT_PAGE_SELECTOR).extract_first()
         print("###########:%s " % next_page)
 
         if next_page:
