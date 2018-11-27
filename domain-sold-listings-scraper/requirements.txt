@@ -1,0 +1,3 @@
+python-dateutil==2.7.5
+Scrapy==1.5.1
+scrapy-random-useragent==0.2

@@ -1,4 +1,7 @@
 import scrapy
+import dateutil.parser as dateparser
+import re
+from datetime import datetime
 
 #building type is part of the url query parameter. Run as separate jobs and add type as a db column
 class DomainSoldListingSpider(scrapy.Spider):
@@ -20,10 +23,17 @@ class DomainSoldListingSpider(scrapy.Spider):
             NUMBER_BATHROOMS = './/div/div[2]/div[3]/div/span[2]/span/text()'
             NUMBER_CARPARKS = './/div/div[2]/div[3]/div/span[3]/span/text()'
             SQUARE_METERS = './/div/div[2]/div[3]/div/span[4]/span/text()'  # extract integer value from result 52 m2
+            soldDateTypeSource = resultset.xpath(SOLD_DATE_TYPE).extract_first()
+            soldDateObj = dateparser.parse(soldDateTypeSource, fuzzy=True)
+            soldDateFormat = datetime.strftime(soldDateObj, '%d-%m-%Y')
+            soldType = re.search(r'[^0-9]*', soldDateTypeSource).group(0).strip()
+
             yield {
                 #'name': resultset.xpath(NAME).extract_first(),
                 'sold-price': resultset.xpath(SOLD_PRICE).extract_first(),
-                'sold-date-type': resultset.xpath(SOLD_DATE_TYPE).extract_first(),
+                'sold-date-type': soldDateTypeSource,
+                'sold-date': soldDateFormat,
+                'sold-type': soldType,
                 'street-address': resultset.xpath(STREET_ADDRESS).extract_first(),
                 'city': resultset.xpath(CITY).extract_first(),
                 'state': resultset.xpath(STATE).extract_first(),
