@@ -8,7 +8,7 @@
 #     https://doc.scrapy.org/en/latest/topics/settings.html
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-CLOSESPIDER_PAGECOUNT = 3
+CLOSESPIDER_PAGECOUNT = 3  # temp set for dev purposes so we only go 3 pages deep
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'random_useragent.RandomUserAgentMiddleware': 400
@@ -21,11 +21,15 @@ NEWSPIDER_MODULE = 'domain-sold-listings-scraper.spiders'
 
 USER_AGENT_LIST = "useragents.txt"
 
-# Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'sampledomain (+http://www.yourdomain.com)'
-
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
+
+ITEM_PIPELINES = {
+   'domain-sold-listings-scraper.pipelines.DomainSoldListingPipeline': 300,
+}
+
+# Crawl responsibly by identifying yourself (and your website) on the user-agent
+#USER_AGENT = 'sampledomain (+http://www.yourdomain.com)'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

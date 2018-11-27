@@ -6,8 +6,8 @@ class DomainSoldListingSpider(scrapy.Spider):
     start_urls = ['https://www.domain.com.au/sold-listings/?postcode=3000']
 
     def parse(self, response):
-        RESULTS_SELECTOR = '.search-results__listing'
-        for resultset in response.css(RESULTS_SELECTOR):
+        RESULTS_SELECTOR = '//li[@class="search-results__listing" and ./div/div[not(contains(@class, "adspot__wrapper"))]]'
+        for resultset in response.xpath(RESULTS_SELECTOR):
 
             NAME = './/@data-reactid'
             SOLD_PRICE = './/div/div[2]/div[1]/p/text()'
@@ -21,7 +21,7 @@ class DomainSoldListingSpider(scrapy.Spider):
             NUMBER_CARPARKS = './/div/div[2]/div[3]/div/span[3]/span/text()'
             SQUARE_METERS = './/div/div[2]/div[3]/div/span[4]/span/text()'  # extract integer value from result 52 m2
             yield {
-                'name': resultset.xpath(NAME).extract_first(),
+                #'name': resultset.xpath(NAME).extract_first(),
                 'sold-price': resultset.xpath(SOLD_PRICE).extract_first(),
                 'sold-date-type': resultset.xpath(SOLD_DATE_TYPE).extract_first(),
                 'street-address': resultset.xpath(STREET_ADDRESS).extract_first(),
